@@ -1,3 +1,4 @@
+server.port: 8282
 spring:
   datasource:
     driverClassName: org.h2.Driver
