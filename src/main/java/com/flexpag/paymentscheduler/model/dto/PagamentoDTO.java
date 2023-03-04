@@ -1,4 +1,4 @@
-package com.flexpag.paymentscheduler.model;
+package com.flexpag.paymentscheduler.model.dto;
 
 import lombok.Data;
 

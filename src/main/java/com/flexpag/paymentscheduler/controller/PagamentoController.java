@@ -1,8 +1,9 @@
 package com.flexpag.paymentscheduler.controller;
 
-import com.flexpag.paymentscheduler.enumaration.StatusPagamento;
-import com.flexpag.paymentscheduler.model.PagamentoDTO;
+import com.flexpag.paymentscheduler.model.dto.PagamentoDTO;
 import com.flexpag.paymentscheduler.model.PagamentoModel;
+import com.flexpag.paymentscheduler.model.dto.PagamentoPatchAtualizarAgendamentoDTO;
+import com.flexpag.paymentscheduler.model.dto.PagamentoPatchRealizarPagamentoDTO;
 import com.flexpag.paymentscheduler.service.PagamentoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -34,9 +35,15 @@ public class PagamentoController {
         pagamentoService.excluirAgendamento(id);
     }
 
-    @PutMapping("atualizar-agendamento")
-    public PagamentoModel atualizarPagamento(@RequestBody PagamentoModel pagamento){
-        return pagamentoService.atualizarAgendamento(pagamento);
+    @PatchMapping("atualizar-agendamento")
+    public PagamentoModel atualizarAgendamento(@RequestParam Long id, @RequestBody PagamentoPatchAtualizarAgendamentoDTO pagamento){
+        return pagamentoService.atualizarAgendamento(id, pagamento);
     }
+
+    @PatchMapping("realizar-pagamento")
+    public PagamentoModel realizarPagamento(@RequestParam Long id, @RequestBody PagamentoPatchRealizarPagamentoDTO pagamento){
+        return pagamentoService.realizarPagamento(id, pagamento);
+    }
+
 
 }

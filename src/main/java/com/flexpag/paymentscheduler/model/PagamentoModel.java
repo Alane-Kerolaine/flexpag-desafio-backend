@@ -17,7 +17,9 @@ public class PagamentoModel {
     private String instituicaoFavorecida;
     private LocalDate dataAgendamento;
     private StatusPagamento statusPagamento = StatusPagamento.pending;
-    private double valor;
+    private double valorFatura;
+    private double saldoFatura = 0.0;
+
     @ManyToOne
     private UsuarioModel usuario;
 }
