@@ -19,7 +19,4 @@ public class PagamentoModel {
     private StatusPagamento statusPagamento = StatusPagamento.pending;
     private double valorFatura;
     private double saldoFatura = 0.0;
-
-    @ManyToOne
-    private UsuarioModel usuario;
 }

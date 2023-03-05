@@ -2,10 +2,8 @@ package com.flexpag.paymentscheduler.model.dto;
 
 import lombok.Data;
 
-import java.time.LocalDate;
-
 @Data
-public class PagamentoDTO {
+public class PagamentoPostDTO {
 
    private Long id;
 
