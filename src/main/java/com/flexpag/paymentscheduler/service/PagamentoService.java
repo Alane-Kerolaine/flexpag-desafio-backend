@@ -5,47 +5,50 @@ import com.flexpag.paymentscheduler.model.PagamentoModel;
 import com.flexpag.paymentscheduler.model.dto.PagamentoGetDTO;
 import com.flexpag.paymentscheduler.model.dto.PagamentoPatchAtualizarAgendamentoDTO;
 import com.flexpag.paymentscheduler.model.dto.PagamentoPatchRealizarPagamentoDTO;
-import com.flexpag.paymentscheduler.model.dto.PagamentoPostDTO;
+import com.flexpag.paymentscheduler.model.dto.PagamentoPostRetornoDTO;
 import com.flexpag.paymentscheduler.repository.PagamentoRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class PagamentoService {
 
     final PagamentoRepository pagamentoRepository;
 
-    public PagamentoPostDTO agendarPagamento(PagamentoModel pagamento){
+    public PagamentoPostRetornoDTO agendarPagamento(PagamentoModel pagamento){
         pagamentoRepository.save(pagamento);
-        PagamentoPostDTO pagamentoDTO = new PagamentoPostDTO();
+        PagamentoPostRetornoDTO pagamentoDTO = new PagamentoPostRetornoDTO();
         pagamentoDTO.setId(pagamento.getId());
         return pagamentoDTO;
     }
 
-//    public Optional<PagamentoModel> verAgendamento(Long id){
-//        return pagamentoRepository.findById(id);
-//    }
-
     public void excluirAgendamento(Long id){
         PagamentoModel pagamentoRegistrado = pagamentoRepository.findById(id).get();
-        verificarStatus(pagamentoRegistrado);
         if(pagamentoRegistrado.getStatusPagamento() == StatusPagamento.pending){
             pagamentoRepository.deleteById(id);
         }else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST);
+            throw new NullPointerException();
         }
     }
 
     public PagamentoModel atualizarAgendamento(Long id, PagamentoPatchAtualizarAgendamentoDTO pagamento){
         PagamentoModel pagamentoRegistrado = pagamentoRepository.findById(id).get();
-        BeanUtils.copyProperties(pagamento, pagamentoRegistrado, "id");
-        return pagamentoRepository.save(pagamentoRegistrado);
+        if(pagamentoRegistrado.getStatusPagamento() == StatusPagamento.pending){
+            BeanUtils.copyProperties(pagamento, pagamentoRegistrado, "id");
+            pagamentoRepository.save(pagamentoRegistrado);
+        }else{
+            throw new NullPointerException();
+        }
+        return null;
+    }
+
+    public PagamentoGetDTO consultarStatusAgendamento(Long id){
+        PagamentoGetDTO pagamentoRetornado = new PagamentoGetDTO();
+        PagamentoModel pagamentoRegistrado = pagamentoRepository.findById(id).get();
+        BeanUtils.copyProperties(pagamentoRegistrado, pagamentoRetornado);
+        return pagamentoRetornado;
     }
 
     public PagamentoModel realizarPagamento(Long id, PagamentoPatchRealizarPagamentoDTO pagamento){
@@ -62,13 +65,6 @@ public class PagamentoService {
             pagamento.setStatusPagamento(StatusPagamento.pending);
         }
         return pagamento.getStatusPagamento();
-    }
-
-    public PagamentoGetDTO consultarStatusAgendamento(Long id){
-        PagamentoGetDTO pagamentoRetornado = new PagamentoGetDTO();
-        PagamentoModel pagamentoRegistrado = pagamentoRepository.findById(id).get();
-        BeanUtils.copyProperties(pagamentoRegistrado, pagamentoRetornado);
-        return pagamentoRetornado;
     }
 
 }

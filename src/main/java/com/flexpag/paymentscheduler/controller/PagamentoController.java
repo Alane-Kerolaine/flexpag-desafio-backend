@@ -1,15 +1,14 @@
 package com.flexpag.paymentscheduler.controller;
 
 import com.flexpag.paymentscheduler.model.dto.PagamentoGetDTO;
-import com.flexpag.paymentscheduler.model.dto.PagamentoPostDTO;
+import com.flexpag.paymentscheduler.model.dto.PagamentoPostRetornoDTO;
 import com.flexpag.paymentscheduler.model.PagamentoModel;
 import com.flexpag.paymentscheduler.model.dto.PagamentoPatchAtualizarAgendamentoDTO;
 import com.flexpag.paymentscheduler.model.dto.PagamentoPatchRealizarPagamentoDTO;
 import com.flexpag.paymentscheduler.service.PagamentoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("pagamentos")
@@ -19,14 +18,9 @@ public class PagamentoController {
     final PagamentoService pagamentoService;
 
     @PostMapping("/registrar-agendamento")
-    public PagamentoPostDTO agendarPagamento(@RequestBody PagamentoModel pagamento){
-        return pagamentoService.agendarPagamento(pagamento);
+    public ResponseEntity<PagamentoPostRetornoDTO> agendarPagamento(@RequestBody PagamentoModel pagamento){
+        return ResponseEntity.ok(pagamentoService.agendarPagamento(pagamento));
     }
-
-//    @GetMapping("/ver-agendamento")
-//    public Optional<PagamentoModel> verAgendamento(@RequestParam Long id){
-//        return pagamentoService.verAgendamento(id);
-//    }
 
     @DeleteMapping("excluir-agendamento")
     public void excluirAgendamento(@RequestParam Long id){
@@ -34,18 +28,18 @@ public class PagamentoController {
     }
 
     @PatchMapping("atualizar-agendamento")
-    public PagamentoModel atualizarAgendamento(@RequestParam Long id, @RequestBody PagamentoPatchAtualizarAgendamentoDTO pagamento){
-        return pagamentoService.atualizarAgendamento(id, pagamento);
+    public ResponseEntity<PagamentoModel> atualizarAgendamento(@RequestParam Long id, @RequestBody PagamentoPatchAtualizarAgendamentoDTO pagamento){
+        return ResponseEntity.ok(pagamentoService.atualizarAgendamento(id, pagamento));
     }
 
     @PatchMapping("realizar-pagamento")
-    public PagamentoModel realizarPagamento(@RequestParam Long id, @RequestBody PagamentoPatchRealizarPagamentoDTO pagamento){
-        return pagamentoService.realizarPagamento(id, pagamento);
+    public ResponseEntity<PagamentoModel> realizarPagamento(@RequestParam Long id, @RequestBody PagamentoPatchRealizarPagamentoDTO pagamento){
+        return ResponseEntity.ok(pagamentoService.realizarPagamento(id, pagamento));
     }
 
     @GetMapping("/consultar-status-pagamento")
-    public PagamentoGetDTO consultarStatusPagamento(@RequestParam Long id){
-        return pagamentoService.consultarStatusAgendamento(id);
+    public ResponseEntity<PagamentoGetDTO> consultarStatusPagamento(@RequestParam Long id){
+        return ResponseEntity.ok(pagamentoService.consultarStatusAgendamento(id));
     }
 
 

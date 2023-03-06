@@ -3,7 +3,7 @@ package com.flexpag.paymentscheduler.model.dto;
 import lombok.Data;
 
 @Data
-public class PagamentoPostDTO {
+public class PagamentoPostRetornoDTO {
 
    private Long id;
 
